@@ -20,16 +20,22 @@ A lightweight Docker image for a complete seedbox solution based on Alpine Linux
 
 ## Quick Start
 
-### 1. Build the Image
+### 1. Get the Image
+
+Pull from a registry:
+
+```bash
+# GitHub Container Registry
+docker pull ghcr.io/xninety9/greenhouse:latest
+
+# Docker Hub
+docker pull xninety9/greenhouse:latest
+```
+
+Or build locally:
 
 ```bash
 docker-compose build
-```
-
-Or build manually:
-
-```bash
-docker build -t greenhouse:latest .
 ```
 
 ### 2. Configure WireGuard VPN

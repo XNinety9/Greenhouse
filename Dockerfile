@@ -1,5 +1,8 @@
 FROM alpine:3.19
 
+LABEL org.opencontainers.image.title="Greenhouse"
+LABEL org.opencontainers.image.description="Lightweight Docker seedbox with rtorrent, Flood UI, and WireGuard VPN"
+
 # Install runtime dependencies
 RUN apk add --no-cache \
     # Core dependencies
