@@ -19,10 +19,13 @@ dht.port.set = 6881
 protocol.pex.set = yes
 trackers.use_udp.set = yes
 
-# DHT bootstrap nodes (required to initially join the DHT network)
-schedule2 = dht_node_1, 5, 0, "dht.add_node=router.bittorrent.com:6881"
-schedule2 = dht_node_2, 5, 0, "dht.add_node=router.utorrent.com:6881"
-schedule2 = dht_node_3, 5, 0, "dht.add_node=dht.transmissionbt.com:6881"
+# DHT bootstrap nodes - needed to join the DHT network on startup.
+# Without these, rtorrent can only rely on stale session data and
+# will show "No DHT nodes available" errors for public torrents.
+schedule2 = dht_bootstrap_1, 30, 3600, ((dht.add_node, "dht.transmissionbt.com:6881"))
+schedule2 = dht_bootstrap_2, 30, 3600, ((dht.add_node, "router.bittorrent.com:6881"))
+schedule2 = dht_bootstrap_3, 30, 3600, ((dht.add_node, "router.utorrent.com:6881"))
+schedule2 = dht_bootstrap_4, 30, 3600, ((dht.add_node, "dht.aelitis.com:6881"))
 
 # More aggressive peer settings for public torrents
 throttle.max_uploads.set = 100
@@ -55,21 +58,17 @@ encoding.add = utf8
 system.umask.set = 0022
 system.cwd.set = (directory.default)
 network.http.dns_cache_timeout.set = 25
-schedule2 = monitor_diskspace, 15, 60, ((close_low_diskspace, 1000M))
 
 # Run the rTorrent process as a daemon in the background
 system.daemon.set = false
 
 # SCGI socket for communication with Flood
 network.scgi.open_local = /var/run/rtorrent/rpc.sock
-execute.nothrow = chmod,777,/var/run/rtorrent/rpc.sock
+execute.nothrow = chmod,660,/var/run/rtorrent/rpc.sock
 
 # Watch directories
 schedule2 = watch_directory_1, 10, 10, ((load.start, (cat, (cfg.watch), "*.torrent")))
 schedule2 = untied_directory, 5, 5, ((stop_untied))
-
-# Ratio handling
-method.insert = d.get_ratio_float, simple, "execute.capture=bash,-c,\"echo \\\"scale=3; \$(rTorrent.calculate_ratio_percent=(d.hash))\\\" | bc\""
 
 # Close torrents when diskspace is low
 schedule2 = monitor_diskspace, 15, 60, ((close_low_diskspace,1000M))

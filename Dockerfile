@@ -55,6 +55,7 @@ RUN addgroup -g 1000 rtorrent \
     && chown -R rtorrent:rtorrent /config /downloads /watch /session /var/run/rtorrent
 
 # Copy configuration files
+COPY config/rtorrent.rc /defaults/rtorrent.rc
 COPY config/supervisord.conf /etc/supervisord.conf
 COPY scripts/entrypoint.sh /entrypoint.sh
 COPY scripts/healthcheck.sh /healthcheck.sh
