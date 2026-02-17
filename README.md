@@ -1,4 +1,8 @@
-# Greenhouse
+<p align="center">
+  <img src="images/logo.png" alt="Greenhouse" width="200">
+</p>
+
+<h1 align="center">Greenhouse</h1>
 
 A lightweight Docker image for a complete seedbox solution based on Alpine Linux, featuring:
 - **jesec's rtorrent** - Modern fork of rtorrent with improvements
