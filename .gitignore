@@ -1,0 +1,20 @@
+# WireGuard credentials
+config/wireguard/wg0.conf
+
+# Flood runtime data
+config/flood/db/
+config/flood/temp/
+config/flood/flood.secret
+
+# rtorrent runtime data
+config/rtorrent/
+session/
+
+# Downloads and watch directories
+downloads/
+watch/
+
+# Docker artifacts
+*.log
+
+.claude/

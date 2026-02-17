@@ -1,0 +1,41 @@
+services:
+  greenhouse:
+    build: .
+    container_name: greenhouse
+    image: greenhouse:latest
+    restart: unless-stopped
+    
+    # Required for WireGuard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    
+    # Required for WireGuard
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv4.ip_forward=1
+      - net.ipv6.conf.all.disable_ipv6=0
+    
+    ports:
+      - "127.0.0.1:5000:5000"  # Flood UI (localhost only - no auth enabled)
+      - "6881:6881"             # rtorrent incoming
+      - "6881:6881/udp"
+    
+    volumes:
+      - ./config:/config
+      - ./downloads:/downloads
+      - ./watch:/watch
+      - ./session:/session                # Persist rtorrent session + DHT state across recreations
+      - /lib/modules:/lib/modules:ro      # Required for WireGuard kernel module
+    
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+    
+    # Optional: Uncomment to use host network mode (may be needed for some VPN providers)
+    # network_mode: host
+    
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
